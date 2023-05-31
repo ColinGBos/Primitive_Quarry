@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "primitivequarry:block/primitive_quarry_bottom",
+    "up": "primitivequarry:block/primitive_quarry_top",
+    "north": "primitivequarry:block/primitive_quarry_front_lit",
+    "south": "primitivequarry:block/primitive_quarry_side",
+    "east": "primitivequarry:block/primitive_quarry_side",
+    "west": "primitivequarry:block/primitive_quarry_side",
+    "particle": "primitivequarry:block/primitive_quarry_side"
+  }
+}
