@@ -1,7 +1,7 @@
 {
   "primitivequarry.primitive_quarry": "Primitive Quarry",
   "primitivequarry.primitive_quarry.info": "Fuel-powered machine that mines a square area behind it down to bedrock.\nPlace a redstone torch up to %d blocks away to set the working diameter.\nOptionally include a tool that will be used for determining drops (silk touch, fortune, etc). The tool will not be damaged.",
-  "primitivequarry.harvester.wrench": "Crouch-right-click with the Handyman's wrench to reset the quarry progress and diameter.",
+  "primitivequarry.primitive_quarry.wrench": "Crouch-right-click with the Handyman's wrench to reset the quarry progress and diameter.",
   "block.primitivequarry.primitive_quarry": "Primitive Quarry",
   "config.jade.plugin_minecraft.primitivequarry.primitive_quarry": "Primitive Quarry Jade Plugin",
   "primitivequarry.primitive_quarry.diameter": "Diameter: %s"

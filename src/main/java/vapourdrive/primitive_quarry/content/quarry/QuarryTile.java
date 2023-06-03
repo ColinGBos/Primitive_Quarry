@@ -20,11 +20,12 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.primitive_quarry.PrimitiveQuarry;
 import vapourdrive.primitive_quarry.config.ConfigSettings;
-import vapourdrive.vapourware.shared.utils.MachineUtils;
 import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
 import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
 import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
 import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.ToolHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,7 +40,7 @@ public class QuarryTile extends AbstractBaseFuelUserTile {
     public final int[] INGREDIENT_SLOT = {0};
     public final int[] FILTER_SLOT = {0,1,2,3,4,5,6};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
-    private final IngredientHandler ingredientHandler = new QuarryIngredientHandler(this, INGREDIENT_SLOT.length);
+    private final IngredientHandler ingredientHandler = new ToolHandler(this, INGREDIENT_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
     private final IngredientHandler filterHandler = new QuarryFilterHandler(this, FILTER_SLOT.length);
     private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
@@ -91,7 +92,7 @@ public class QuarryTile extends AbstractBaseFuelUserTile {
     }
 
     private void mineAndProgress(Level level, BlockState targetState, BlockPos pos, Boolean bump, Boolean filter){
-        ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
+        ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
 
         LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
 
@@ -271,8 +272,9 @@ public class QuarryTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
+            case INGREDIENT_1 -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
             case INGREDIENT_2 -> filterHandler.getStackInSlot(FILTER_SLOT[index]);
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -281,7 +283,7 @@ public class QuarryTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
+            case INGREDIENT_1 -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
             case INGREDIENT_2 -> filterHandler.extractItem(FILTER_SLOT[index], amount, simulate);
         }
     }
@@ -291,8 +293,9 @@ public class QuarryTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
+            case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
             case INGREDIENT_2 -> filterHandler.insertItem(FILTER_SLOT[index], stack, simulate);
+            default -> ItemStack.EMPTY;
         };
     }
 }

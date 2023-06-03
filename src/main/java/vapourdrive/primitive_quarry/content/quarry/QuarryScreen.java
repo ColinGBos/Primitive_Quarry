@@ -6,8 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.primitive_quarry.PrimitiveQuarry;
-import vapourdrive.primitive_quarry.config.ConfigSettings;
 import vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen;
+import vapourdrive.vapourware.shared.utils.CompUtils;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 import java.util.List;
 
@@ -16,13 +17,13 @@ public class QuarryScreen extends AbstractBaseMachineScreen<QuarryContainer> {
     protected int imgHeight = 209;
 
     public QuarryScreen(QuarryContainer container, Inventory inv, Component name) {
-        super(container, inv, name, PrimitiveQuarry.MODID, "primitive_quarry", 12, 13, 58, 158, 6, 1, true);
+        super(container, inv, name, new DeferredComponent(PrimitiveQuarry.MODID,"primitive_quarry"), 12, 13, 58, 158, 6, 1, true);
+        PrimitiveQuarry.debugLog(comp.getMod());
         this.machineContainer = container;
     }
 
     @Override
     public int getYSize() { return imgHeight; }
-
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
@@ -32,9 +33,8 @@ public class QuarryScreen extends AbstractBaseMachineScreen<QuarryContainer> {
 
     @Override
     protected void getAdditionalInfoHover(List<Component> hoveringText) {
-        hoveringText.add(Component.translatable(this.modID + "." + this.ID + ".info", ConfigSettings.PRIMITIVE_QUARRY_MAX_RADIUS.get()));
-        hoveringText.add(Component.translatable("vapourware.fuel_excess.info"));
-        hoveringText.add(Component.translatable("primitivequarry.harvester.wrench").withStyle(ChatFormatting.GOLD));
+        super.getAdditionalInfoHover(hoveringText);
+        hoveringText.add(CompUtils.getComp(comp.getMod(),comp.getTail()+".wrench").withStyle(ChatFormatting.GOLD));
     }
 
 }

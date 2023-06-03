@@ -17,6 +17,8 @@ import vapourdrive.primitive_quarry.setup.Registration;
 import vapourdrive.vapourware.shared.base.AbstractBaseMachineContainer;
 import vapourdrive.vapourware.shared.base.slots.SlotFuel;
 import vapourdrive.vapourware.shared.base.slots.SlotOutput;
+import vapourdrive.vapourware.shared.base.slots.SlotTool;
+import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import java.util.Objects;
 
@@ -40,7 +42,7 @@ public class QuarryContainer extends AbstractBaseMachineContainer {
         if (tileEntity != null) {
             tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
                 addSlot(new SlotFuel(h, 0, 8, 77));
-                addSlot(new QuarrySlotIngredient(h, 1, 8, 102));
+                addSlot(new SlotTool(h, 1, 8, 102));
                 addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
                 addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
                 addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + 18 * 2, OUTPUT_INVENTORY_YPOS));
@@ -152,6 +154,6 @@ public class QuarryContainer extends AbstractBaseMachineContainer {
     }
 
     public Component getDiameterComponent() {
-        return Component.translatable("primitivequarry.primitive_quarry.diameter", machineData.get(2));
+        return CompUtils.getArgComp(PrimitiveQuarry.MODID, "primitive_quarry.diameter", machineData.get(2));
     }
 }
