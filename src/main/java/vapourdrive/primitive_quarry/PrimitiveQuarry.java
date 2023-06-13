@@ -5,14 +5,12 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vapourdrive.primitive_quarry.config.ConfigSettings;
 import vapourdrive.primitive_quarry.setup.ClientSetup;
-import vapourdrive.primitive_quarry.setup.ModSetup;
 import vapourdrive.primitive_quarry.setup.Registration;
 
 @Mod(PrimitiveQuarry.MODID)
@@ -30,8 +28,8 @@ public class PrimitiveQuarry {
         Registration.init(eventBus);
 
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> ModSetup.init());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
+        eventBus.addListener(ClientSetup::setup);
+        eventBus.addListener(Registration::buildContents);
     }
 
     public static void debugLog(String toLog) {

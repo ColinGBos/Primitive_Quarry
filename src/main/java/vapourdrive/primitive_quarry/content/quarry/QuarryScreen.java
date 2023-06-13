@@ -1,7 +1,7 @@
 package vapourdrive.primitive_quarry.content.quarry;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -17,24 +17,27 @@ public class QuarryScreen extends AbstractBaseMachineScreen<QuarryContainer> {
     protected int imgHeight = 209;
 
     public QuarryScreen(QuarryContainer container, Inventory inv, Component name) {
-        super(container, inv, name, new DeferredComponent(PrimitiveQuarry.MODID,"primitive_quarry"), 12, 13, 58, 158, 6, 1, true);
+        super(container, inv, name, new DeferredComponent(PrimitiveQuarry.MODID, "primitive_quarry"), 12, 13, 58, 158, 6, 1, true);
         PrimitiveQuarry.debugLog(comp.getMod());
         this.machineContainer = container;
     }
 
     @Override
-    public int getYSize() { return imgHeight; }
+    public int getYSize() {
+        return imgHeight;
+    }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        super.renderLabels(matrixStack, mouseX, mouseY);
-        this.font.draw(matrixStack, machineContainer.getDiameterComponent(), (float) this.titleLabelX+33, (float) this.titleLabelY+20, 16777215);
+    protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderLabels(graphics, mouseX, mouseY);
+        graphics.drawString(this.font, machineContainer.getDiameterComponent(), this.titleLabelX + 33,
+                this.titleLabelY + 20, 16777215);
     }
 
     @Override
     protected void getAdditionalInfoHover(List<Component> hoveringText) {
         super.getAdditionalInfoHover(hoveringText);
-        hoveringText.add(CompUtils.getComp(comp.getMod(),comp.getTail()+".wrench").withStyle(ChatFormatting.GOLD));
+        hoveringText.add(CompUtils.getComp(comp.getMod(), comp.getTail() + ".wrench").withStyle(ChatFormatting.GOLD));
     }
 
 }
