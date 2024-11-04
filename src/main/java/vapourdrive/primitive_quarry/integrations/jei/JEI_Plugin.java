@@ -12,8 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.primitive_quarry.PrimitiveQuarry;
+import vapourdrive.primitive_quarry.config.ConfigSettings;
 import vapourdrive.primitive_quarry.content.quarry.QuarryScreen;
 import vapourdrive.primitive_quarry.setup.Registration;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 @JeiPlugin
 public class JEI_Plugin implements IModPlugin {
@@ -21,7 +23,7 @@ public class JEI_Plugin implements IModPlugin {
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return new ResourceLocation(PrimitiveQuarry.MODID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(PrimitiveQuarry.MODID, "jei_plugin");
     }
 
     @Override
@@ -37,8 +39,9 @@ public class JEI_Plugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addIngredientInfo(new ItemStack(Registration.PRIMITIVE_QUARRY_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("primitivequarry.primitive_quarry.info"));
+//        registration.addIngredientInfo(new ItemStack(Registration.PRIMITIVE_QUARRY_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("primitivequarry.primitive_quarry.info"));
+        DeferredComponent comp = new DeferredComponent(PrimitiveQuarry.MODID, "primitive_quarry.info", ConfigSettings.PRIMITIVE_QUARRY_MAX_RADIUS);
+        registration.addIngredientInfo(new ItemStack(Registration.PRIMITIVE_QUARRY_ITEM.get()), VanillaTypes.ITEM_STACK, comp.get());
     }
-
 
 }

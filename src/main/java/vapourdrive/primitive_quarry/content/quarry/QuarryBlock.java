@@ -1,12 +1,9 @@
 package vapourdrive.primitive_quarry.content.quarry;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Rotation;
@@ -15,10 +12,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.primitive_quarry.PrimitiveQuarry;
 import vapourdrive.vapourware.shared.base.AbstractBaseMachineBlock;
 
 import javax.annotation.Nullable;
@@ -26,8 +22,14 @@ import javax.annotation.Nullable;
 
 public class QuarryBlock extends AbstractBaseMachineBlock {
 
+    public static final MapCodec<QuarryBlock> CODEC = simpleCodec(QuarryBlock::new);
+
     public QuarryBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE), 0.2f);
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASEDRUM), 0.2f);
+    }
+
+    public QuarryBlock(Properties properties) {
+        super(properties, 0.2f);
     }
 
     @Nullable
@@ -37,7 +39,7 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
+    public @NotNull BlockState rotate(@NotNull BlockState state, LevelAccessor world, @NotNull BlockPos pos, @NotNull Rotation direction) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof QuarryTile machine) {
             machine.setWorkingDiameter(0);
@@ -60,24 +62,33 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
         }
     }
 
+//    @Override
+//    protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
+//        BlockEntity blockEntity = level.getBlockEntity(pos);
+//        if (blockEntity instanceof QuarryTile machine) {
+//            MenuProvider containerProvider = new MenuProvider() {
+//                @Override
+//                public @NotNull Component getDisplayName() {
+//                    return Component.translatable(PrimitiveQuarry.MODID + ".primitive_quarry");
+//                }
+//
+//                @Override
+//                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+//                    return new QuarryContainer(windowId, level, pos, playerInventory, playerEntity, machine.getQuarryData());
+//                }
+//            };
+////            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+//            player.openMenu(containerProvider);
+//        } else {
+//            throw new IllegalStateException("Our named container provider is missing!");
+//        }
+//    }
+
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof QuarryTile machine) {
-            MenuProvider containerProvider = new MenuProvider() {
-                @Override
-                public @NotNull Component getDisplayName() {
-                    return Component.translatable(PrimitiveQuarry.MODID + ".primitive_quarry");
-                }
-
-                @Override
-                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                    return new QuarryContainer(windowId, level, pos, playerInventory, playerEntity, machine.getQuarryData());
-                }
-            };
-            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-        } else {
-            throw new IllegalStateException("Our named container provider is missing!");
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof QuarryTile quarry) {
+            player.openMenu((MenuProvider) blockentity, pos);
         }
     }
 
@@ -88,7 +99,7 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);
             if (tileEntity instanceof QuarryTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler());
+                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
@@ -102,5 +113,10 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
             machine.resetCount();
         }
         return true;
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends QuarryBlock> codec() {
+        return CODEC;
     }
 }

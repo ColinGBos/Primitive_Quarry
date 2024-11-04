@@ -1,18 +1,13 @@
 package vapourdrive.primitive_quarry;
 
-
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vapourdrive.primitive_quarry.config.ConfigSettings;
-import vapourdrive.primitive_quarry.setup.ClientSetup;
-import vapourdrive.primitive_quarry.setup.ModSetup;
 import vapourdrive.primitive_quarry.setup.Registration;
 
 @Mod(PrimitiveQuarry.MODID)
@@ -22,16 +17,17 @@ public class PrimitiveQuarry {
     public static final String MODID = "primitivequarry";
     public static final boolean debugMode = true;
 
-    public PrimitiveQuarry() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public PrimitiveQuarry(ModContainer container) {
+        IEventBus eventBus = container.getEventBus();
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigSettings.SERVER_CONFIG);
+        container.registerConfig(ModConfig.Type.SERVER, ConfigSettings.SERVER_CONFIG);
 
-        Registration.init(eventBus);
+        Registration.init(container.getEventBus());
 
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> ModSetup.init());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
+        assert eventBus != null;
+        eventBus.addListener(Registration::buildContents);
+        eventBus.addListener(Registration::registerCapabilities);
     }
 
     public static void debugLog(String toLog) {

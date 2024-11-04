@@ -1,7 +1,7 @@
 package vapourdrive.primitive_quarry.content.quarry;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import vapourdrive.vapourware.shared.base.slots.BaseSlotIngredient;
 import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
