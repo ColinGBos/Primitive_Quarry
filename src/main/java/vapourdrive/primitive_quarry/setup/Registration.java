@@ -32,11 +32,11 @@ public class Registration {
     public static final Supplier<BlockEntityType<QuarryTile>> PRIMITIVE_QUARRY_TILE = TILES.register("primitive_quarry", () -> BlockEntityType.Builder.of(QuarryTile::new, PRIMITIVE_QUARRY_BLOCK.get()).build(null));
 
     public static final Supplier<MenuType<QuarryMenu>> PRIMITIVE_QUARRY_CONTAINER = MENUS.register("primitive_quarry",
-            () -> IMenuTypeExtension.create((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
-                Level world = inv.player.getCommandSenderWorld();
-                return new QuarryMenu(windowId, world, pos, inv, inv.player, new QuarryData());
-            }));
+        () -> IMenuTypeExtension.create((windowId, inv, data) -> {
+            BlockPos pos = data.readBlockPos();
+            Level world = inv.player.getCommandSenderWorld();
+            return new QuarryMenu(windowId, world, pos, inv, inv.player, new QuarryData());
+        }));
 
     public static void init(IEventBus eventBus) {
         BLOCKS.register(eventBus);

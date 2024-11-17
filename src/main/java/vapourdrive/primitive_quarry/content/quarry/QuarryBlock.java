@@ -86,15 +86,14 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
 
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
-        BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof QuarryTile quarry) {
-            player.openMenu((MenuProvider) blockentity, pos);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof QuarryTile quarry) {
+            player.openMenu((MenuProvider) blockEntity, pos);
         }
     }
 
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);

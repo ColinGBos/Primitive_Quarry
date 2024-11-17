@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.primitive_quarry.PrimitiveQuarry;
 import vapourdrive.primitive_quarry.setup.Registration;
@@ -33,10 +34,7 @@ public class QuarryMenu extends AbstractBaseMachineMenu {
     public QuarryMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, QuarryData machineData) {
         super(windowId, world, pos, inv, player, Registration.PRIMITIVE_QUARRY_CONTAINER.get(), machineData);
 
-        //We use this vs the builtin method because we split all the shorts
-        addSplitDataSlots(machineData);
-
-        layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
+//        layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
         if (tileEntity != null && tileEntity instanceof QuarryTile quarryTile) {
             IItemHandler handler = quarryTile.getItemHandler(null);
@@ -78,7 +76,24 @@ public class QuarryMenu extends AbstractBaseMachineMenu {
             addSlot(new QuarrySlotFilter(handler, 35, OUTPUT_INVENTORY_XPOS + 18 * 5, OUTPUT_INVENTORY_YPOS + 79));
             addSlot(new QuarrySlotFilter(handler, 36, OUTPUT_INVENTORY_XPOS + 18 * 6, OUTPUT_INVENTORY_YPOS + 79));
         }
+        layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
+        //We use this vs the builtin method because we split all the shorts
+        addSplitDataSlots(machineData);
     }
+
+//    @Override
+//    protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
+//        int k;
+//        for(k = 0; k < 3; ++k) {
+//            for(int j = 0; j < 9; ++j) {
+//                this.addSlot(new Slot(this.playerInv, j + k * 9 + 9, leftCol + j * 18, topRow + k * 18));
+//            }
+//        }
+//
+//        for(k = 0; k < 9; ++k) {
+//            this.addSlot(new Slot(this.playerInv, k, leftCol + k * 18, topRow + 58));
+//        }
+//    }
 
     @Override
     public boolean stillValid(@NotNull Player playerIn) {
@@ -97,39 +112,37 @@ public class QuarryMenu extends AbstractBaseMachineMenu {
             itemstack = stack.copy();
 
             //Furnace outputs to Inventory
-            if (index >= 36 && index <= 72) {
+            if (index >= 0 && index <= 36) {
                 PrimitiveQuarry.debugLog("From output");
-                if (!this.moveItemStackTo(stack, 0, 36, false)) {
+                if (!this.moveItemStackTo(stack, 37, 73, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             //Player Inventory
-            else if (index <= 35) {
+            else if (index >= 37) {
                 //Inventory to fuel
                 if (stack.getBurnTime(RecipeType.SMELTING) > 0.0) {
-                    if (!this.moveItemStackTo(stack, 36, 37, false)) {
+                    if (!this.moveItemStackTo(stack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (stack.getMaxStackSize() == 1) {
-                    if (!this.moveItemStackTo(stack, 37, 38, false)) {
+                    if (!this.moveItemStackTo(stack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.moveItemStackTo(stack, 66, 73, false)) {
-                    return ItemStack.EMPTY;
                 }
 
                 //Inventory to hotbar
-                if (index <= 26) {
+                if (index < 64) {
                     PrimitiveQuarry.debugLog("From Player inventory to hotbar");
-                    if (!this.moveItemStackTo(stack, 27, 36, false)) {
+                    if (!this.moveItemStackTo(stack, 64, 72, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 //Hotbar to inventory
                 else {
                     PrimitiveQuarry.debugLog("From Hotbar to inventory");
-                    if (!this.moveItemStackTo(stack, 0, 27, false)) {
+                    if (!this.moveItemStackTo(stack, 37, 63, false)) {
                         return ItemStack.EMPTY;
                     }
                 }

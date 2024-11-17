@@ -4,13 +4,13 @@
 
 Transform your mining operations with Primitive Quarry - a simplified automated mining solution for Minecraft. This quarry system uses furnace-compatible fuels to power through layers of blocks.
 
+## Key Features
+
 ### 🔥 Easy Fueling
 
 - Use anything that you would stick in a furnace
 - Built-in fuel capacity means the quarry stores more energy than just what's in the fuel stack
 - Won't waste fuel, only consumes fuel while working
-
-## Key Features
 
 ### ⚡ Efficient Mining
 
@@ -47,11 +47,6 @@ Equip the quarry with a tool and it will use the enchants on the tool to generat
 - 1x Diamond Pick
 - 1x Diamond Shovel
 - 1x Furnace
-
-## Performance Metrics
-
-- Mining Speed: up to 1 block/tick - configurable
-- Fuel Efficiency: 4000 units of fuel per block - configurable
 
 ## Installation & Compatibility
 
