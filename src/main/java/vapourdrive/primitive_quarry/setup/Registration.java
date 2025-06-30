@@ -47,7 +47,7 @@ public class Registration {
 
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         // Add to ingredients tab
-        if (event.getTab() == vapourdrive.vapourware.setup.Registration.VAPOUR_GROUP.get() || event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
+        if (event.getTab() == vapourdrive.vapourware.setup.Registration.VAPOUR_GROUP.get()) {
             event.accept(PRIMITIVE_QUARRY_ITEM.get().getDefaultInstance());
         }
     }
