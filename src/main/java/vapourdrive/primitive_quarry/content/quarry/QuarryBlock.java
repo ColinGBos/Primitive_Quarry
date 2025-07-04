@@ -62,45 +62,11 @@ public class QuarryBlock extends AbstractBaseMachineBlock {
         }
     }
 
-//    @Override
-//    protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
-//        BlockEntity blockEntity = level.getBlockEntity(pos);
-//        if (blockEntity instanceof QuarryTile machine) {
-//            MenuProvider containerProvider = new MenuProvider() {
-//                @Override
-//                public @NotNull Component getDisplayName() {
-//                    return Component.translatable(PrimitiveQuarry.MODID + ".primitive_quarry");
-//                }
-//
-//                @Override
-//                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-//                    return new QuarryContainer(windowId, level, pos, playerInventory, playerEntity, machine.getQuarryData());
-//                }
-//            };
-////            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-//            player.openMenu(containerProvider);
-//        } else {
-//            throw new IllegalStateException("Our named container provider is missing!");
-//        }
-//    }
-
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof QuarryTile quarry) {
             player.openMenu((MenuProvider) blockEntity, pos);
-        }
-    }
-
-
-    @Override
-    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity tileEntity = world.getBlockEntity(blockPos);
-            if (tileEntity instanceof QuarryTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
-            }
-            super.onRemove(state, world, blockPos, newState, isMoving);
         }
     }
 
